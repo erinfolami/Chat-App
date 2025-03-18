@@ -10,15 +10,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
 import com.example.arya.R
+import com.example.arya.ui.theme.InterFontFamily
 
 
 @Composable
-fun ChatScreen(){
-    ChatScreen()
+fun ChatScreen(modifier: Modifier = Modifier){
+    ChatToolbar(
+        displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
+        userName = "Sarah Carter",
+        navigationIcon = painterResource(id = R.drawable.icon_arrow_previous_64x64),
+        onNavigationClick = { /* Handle navigation click */ },
+    )
 }
 
 // This composable function creates a customizable toolbar for the chat screen.
@@ -42,9 +49,8 @@ fun ChatToolbar(
                 Text(
                     text = userName,
                     style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontFamily = FontFamily.Default
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = InterFontFamily
                     )
                 )
             }
@@ -53,6 +59,7 @@ fun ChatToolbar(
             IconButton(onClick = onNavigationClick) {
                 Icon(
                     painter = navigationIcon,
+                    tint = Color.White,
                     contentDescription = "Navigation Icon"
                 )
             }
@@ -71,7 +78,7 @@ fun PreviewChatToolbar() {
     ChatToolbar(
         displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
         userName = "Sarah Carter",
-        navigationIcon = painterResource(id = R.drawable.icon_arrow_previous),
+        navigationIcon = painterResource(id = R.drawable.icon_arrow_previous_64x64),
         onNavigationClick = { /* Handle navigation click */ },
     )
 }
