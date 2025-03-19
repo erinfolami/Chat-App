@@ -39,6 +39,7 @@ import linearGradientBackground
 @Composable
 fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Modifier) {
 
+
     Column(
         Modifier
             .fillMaxSize()
@@ -74,15 +75,17 @@ fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Mod
             true
         )
 
-        Spacer(
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        SendMessageBox(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth(), backgroundModifier
         )
-
-
-        SendMessageBox()
     }
+
 }
+
 
 // This composable function creates a customizable toolbar for the chat screen.
 // It includes a navigation icon, a display picture, and the user's name.
@@ -202,17 +205,20 @@ fun MessageCard(
 
 
 @Composable
-fun SendMessageBox() {
-    var text by remember { mutableStateOf("") } // State for text field
+fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
+    var text by remember { mutableStateOf("") }
     var showAttachmentOptions by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 70.dp)
 
-
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 70.dp),
+                .align(Alignment.CenterStart),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = {
@@ -225,60 +231,54 @@ fun SendMessageBox() {
                     modifier = Modifier.size(18.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
 
-            Card(
+
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentSize()
-                    .clip(RoundedCornerShape(30.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-
-                ) {
-
-                Row() {
-                    TextField(
-                        value = text,
-                        onValueChange = { text = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(),
-                        colors = TextFieldDefaults.colors(),
-                        textStyle = LocalTextStyle.current.copy(color = Color.White),
-                        singleLine = true,
-                        placeholder = {
-                            Text(
-                                text = "Message",
-                                color = Color.Black.copy(alpha = 0.7f)
-                            )
+            ) {
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    colors = TextFieldDefaults.colors(),
+                    textStyle = LocalTextStyle.current.copy(color = Color.White),
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Message",
+                            color = Color.Black.copy(alpha = 0.7f)
+                        )
+                    },
+                    trailingIcon = {
+                        if (text.trim().isNotEmpty()) {
+                            IconButton(onClick = {}) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
+                                    contentDescription = "Send",
+                                    tint = Color.White
+                                )
+                            }
                         }
-                    )
-
-                    if (text.isNotEmpty()) {
-                        IconButton(
-                            onClick = {},
-                            modifier = Modifier
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
-                                contentDescription = "Send",
-                                tint = Color.White
-                            )
-                        }
-                    }
-                }
-
-                AnimatedVisibility(
-                    visible = showAttachmentOptions,
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                    modifier = Modifier.zIndex(1f) // Ensure it's on top
-                ) {
-                    AttachmentOptionsOverlay()
-                }
+                    },
+                    shape = RoundedCornerShape(30.dp) // Apply rounded corners
+                )
             }
+
+            AnimatedVisibility(
+                visible = showAttachmentOptions,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.zIndex(1f) // Ensure it's on top
+            ) {
+                AttachmentOptionsOverlay()
+            }
+
         }
+
     }
 }
 
