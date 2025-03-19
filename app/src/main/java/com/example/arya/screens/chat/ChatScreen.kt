@@ -150,6 +150,7 @@ data class MessageData(
 
 
 @Composable
+
 fun MessageList(messages: List<MessageData>) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(messages) { messageData ->
@@ -219,7 +220,7 @@ fun MessageItem(messageData: MessageData) {
             }
         }
     }
-}
+
 
 
 @Composable
