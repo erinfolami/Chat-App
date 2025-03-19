@@ -3,10 +3,15 @@ package com.example.arya.screens.chat
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -14,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +56,7 @@ fun ChatScreen(modifier: Modifier = Modifier) {
             backgroundColor = Color.Black,
             false
         )
-        Spacer(modifier = Modifier.height(16.dp))
+
         MessageCard(
             Modifier,
             messageText2,
@@ -58,6 +64,14 @@ fun ChatScreen(modifier: Modifier = Modifier) {
             backgroundColor = Color.White,
             true
         )
+
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+        )
+
+
+        SendMessageBox()
     }
 }
 
@@ -143,7 +157,11 @@ fun MessageCard(
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Row(modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.End) {
+                Row(
+                    modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
                     Text(
                         text = timeText,
                         style = TextStyle(
@@ -161,6 +179,70 @@ fun MessageCard(
                             modifier = Modifier
                                 .size(16.dp)
                                 .padding(start = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SendMessageBox() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 70.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.icon_plus_64x64), // Replace with your icon resource
+            contentDescription = "Add",
+            tint = Color.White,
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize()
+                .clip(RoundedCornerShape(30.dp)),
+            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+
+            ) {
+
+            Row() {
+                var text by remember { mutableStateOf("") } // State for text field
+
+                TextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize(),
+                    colors = TextFieldDefaults.colors(),
+                    textStyle = LocalTextStyle.current.copy(color = Color.White),
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Message",
+                            color = Color.Black.copy(alpha = 0.7f)
+                        )
+                    }
+                )
+
+                if (text.isNotEmpty()) {
+                    IconButton(
+                        onClick = {},
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
+                            contentDescription = "Send",
+                            tint = Color.White
                         )
                     }
                 }
