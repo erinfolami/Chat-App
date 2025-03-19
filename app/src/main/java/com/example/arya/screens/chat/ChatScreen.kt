@@ -1,8 +1,13 @@
 package com.example.arya.screens.chat
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -19,24 +24,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.zIndex
 import com.example.arya.R
 import com.example.arya.ui.theme.InterFontFamily
+import linearGradientBackground
 
 
 @Composable
-fun ChatScreen(modifier: Modifier = Modifier) {
+fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Modifier) {
 
     Column(
         Modifier
             .fillMaxSize()
-            .background(Color.Blue)
+            .then(backgroundModifier)
     ) {
         ChatToolbar(
+            backgroundModifier = backgroundModifier,
             displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
             userName = "Sarah Carter",
             navigationIcon = painterResource(id = R.drawable.icon_arrow_previous_64x64),
@@ -53,7 +62,7 @@ fun ChatScreen(modifier: Modifier = Modifier) {
             Modifier,
             messageText1,
             timeText1,
-            backgroundColor = Color.Black,
+            backgroundColor = Color(0xFF1F94D1),
             false
         )
 
@@ -80,19 +89,22 @@ fun ChatScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatToolbar(
+    backgroundModifier: Modifier,
     displayPicture: Painter,
     userName: String,
     navigationIcon: Painter,
     onNavigationClick: () -> Unit = {},
 ) {
-    2
+
     TopAppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = displayPicture,
                     contentDescription = "User Display Picture",
-                    modifier = Modifier.wrapContentSize()
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .clip(RoundedCornerShape(15.dp))
                 )
                 Text(
                     text = userName,
@@ -100,6 +112,7 @@ fun ChatToolbar(
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = InterFontFamily
                     ),
+                    color = Color.White,
                     modifier = Modifier.padding(start = 10.dp)
                 )
             }
@@ -117,7 +130,7 @@ fun ChatToolbar(
             // You can add more actions here (e.g., settings, profile, etc.)
         },
         modifier = Modifier.fillMaxWidth(),
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF42A5F5))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
 
     )
 }
@@ -165,7 +178,7 @@ fun MessageCard(
                     Text(
                         text = timeText,
                         style = TextStyle(
-                            color = textColor,
+                            color = if (isDelivered) Color(0xFF42A5F5) else textColor,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Light
                         ),
@@ -190,61 +203,79 @@ fun MessageCard(
 
 @Composable
 fun SendMessageBox() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 70.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.icon_plus_64x64), // Replace with your icon resource
-            contentDescription = "Add",
-            tint = Color.White,
-            modifier = Modifier.size(18.dp)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
+    var text by remember { mutableStateOf("") } // State for text field
+    var showAttachmentOptions by remember { mutableStateOf(false) }
 
-        Card(
+    Box(modifier = Modifier.fillMaxSize()) {
+
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentSize()
-                .clip(RoundedCornerShape(30.dp)),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-
-            ) {
-
-            Row() {
-                var text by remember { mutableStateOf("") } // State for text field
-
-                TextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize(),
-                    colors = TextFieldDefaults.colors(),
-                    textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Message",
-                            color = Color.Black.copy(alpha = 0.7f)
-                        )
-                    }
+                .padding(bottom = 70.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = {
+                showAttachmentOptions = !showAttachmentOptions
+            }) { // Toggle attachment options
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_plus_64x64), // Replace with your plus icon
+                    contentDescription = "Add",
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
                 )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
 
-                if (text.isNotEmpty()) {
-                    IconButton(
-                        onClick = {},
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
-                            contentDescription = "Send",
-                            tint = Color.White
-                        )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize()
+                    .clip(RoundedCornerShape(30.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+
+                ) {
+
+                Row() {
+                    TextField(
+                        value = text,
+                        onValueChange = { text = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(),
+                        colors = TextFieldDefaults.colors(),
+                        textStyle = LocalTextStyle.current.copy(color = Color.White),
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Message",
+                                color = Color.Black.copy(alpha = 0.7f)
+                            )
+                        }
+                    )
+
+                    if (text.isNotEmpty()) {
+                        IconButton(
+                            onClick = {},
+                            modifier = Modifier
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
+                                contentDescription = "Send",
+                                tint = Color.White
+                            )
+                        }
                     }
+                }
+
+                AnimatedVisibility(
+                    visible = showAttachmentOptions,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    modifier = Modifier.zIndex(1f) // Ensure it's on top
+                ) {
+                    AttachmentOptionsOverlay()
                 }
             }
         }
@@ -252,8 +283,56 @@ fun SendMessageBox() {
 }
 
 
+@Composable
+fun AttachmentOptionsOverlay() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f))
+            .blur(radius = 10.dp) // Apply blur effect
+            .clickable { /* Prevent clicks from passing through */ },
+        contentAlignment = Alignment.BottomStart
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            AttachmentOption(iconId = R.drawable.icon_camera_64x64, text = "Camera")
+            AttachmentOption(iconId = R.drawable.icon_photos_64x64, text = "Photos")
+            AttachmentOption(iconId = R.drawable.icon_files_64x64, text = "Files")
+            AttachmentOption(iconId = R.drawable.icon_audio_64x64, text = "Audio")
+        }
+    }
+}
+
+@Composable
+fun AttachmentOption(iconId: Int, text: String) {
+    Row(
+        modifier = Modifier.padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = 0.2f))
+                .padding(8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = iconId),
+                contentDescription = text,
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(text = text, color = Color.White)
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    ChatScreen()
+    val backgroundModifier = Modifier.linearGradientBackground()
+
+    ChatScreen(backgroundModifier)
 }
