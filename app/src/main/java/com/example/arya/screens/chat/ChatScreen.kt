@@ -7,6 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -39,49 +41,51 @@ import linearGradientBackground
 @Composable
 fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Modifier) {
 
+    var showAttachmentOptions by remember { mutableStateOf(false) } // Add state for overlay visibility
 
-    Column(
-        Modifier
+    Box(
+        modifier = Modifier
             .fillMaxSize()
             .then(backgroundModifier)
     ) {
-        ChatToolbar(
-            backgroundModifier = backgroundModifier,
-            displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
-            userName = "Sarah Carter",
-            navigationIcon = painterResource(id = R.drawable.icon_arrow_previous),
-            onNavigationClick = { /* Handle navigation click */ },
-        )
 
-        val messageText1 =
-            "Hey John, let's get together and discuss the job proposal. Does Monday Work?"
-        val timeText1 = "11:48 AM"
-
-        val messageText2 = "That would be great. Yes, I will see you on Monday."
-        val timeText2 = "1:54 PM"
-        MessageCard(
-            Modifier,
-            messageText1,
-            timeText1,
-            backgroundColor = Color(0xFF1F94D1),
-            false
-        )
-
-        MessageCard(
-            Modifier,
-            messageText2,
-            timeText2,
-            backgroundColor = Color.White,
-            true
-        )
+        Column(
+            Modifier.fillMaxSize()
+        ) {
+            ChatToolbar(
+                displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
+                userName = "Sarah Carter",
+                navigationIcon = painterResource(id = R.drawable.icon_arrow_previous_64x64),
+                onNavigationClick = { /* Handle navigation click */ },
+            )
 
 
-        Spacer(modifier = Modifier.weight(1f))
+            val messages = listOf(
+                MessageData(
+                    message = "Hey John, let's get together and discuss the job proposal. Does Monday Work?",
+                    time = "11:48 AM",
+                    isSender = true,
+                ),
+                MessageData(
+                    message = "That would be great. Yes, I will see you on Monday.",
+                    time = "11:54 AM",
+                    isSender = false,
+                ),
+            )
 
+            MessageList(messages = messages)
+
+            Spacer(modifier = Modifier.weight(1f))
+
+
+        }
         SendMessageBox(
             modifier = Modifier
-                .fillMaxWidth(), backgroundModifier
+                .fillMaxWidth()
+                .align(Alignment.BottomEnd), // Align to bottom end
+            backgroundModifier = backgroundModifier,
         )
+
     }
 
 }
@@ -92,7 +96,6 @@ fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Mod
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatToolbar(
-    backgroundModifier: Modifier,
     displayPicture: Painter,
     userName: String,
     navigationIcon: Painter,
@@ -139,33 +142,48 @@ fun ChatToolbar(
 }
 
 
-@Composable
-fun MessageCard(
-    modifier: Modifier,
-    messageText: String,
-    timeText: String,
-    backgroundColor: Color,
-    isDelivered: Boolean = false,
-) {
-    val textColor =
-        if (backgroundColor == Color.White) Color.Black else Color.White // Determine text color
+data class MessageData(
+    val message: String,
+    val time: String,
+    val isSender: Boolean // true if sender, false if receiver
+)
 
-    Row( // Use Row to control alignment
-        modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start // Align to the start
+
+@Composable
+fun MessageList(messages: List<MessageData>) {
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        items(messages) { messageData ->
+            MessageItem(messageData = messageData)
+        }
+    }
+}
+
+
+@Composable
+fun MessageItem(messageData: MessageData) {
+    val backgroundColor = if (messageData.isSender) Color(0xFF1F94D1) else Color.White
+    val textColor = if (messageData.isSender) Color.White else Color.Black
+    val alignment = if (messageData.isSender) Arrangement.End else Arrangement.Start
+    val paddingModifier =
+        if (messageData.isSender) Modifier.padding(end = 70.dp) else Modifier.padding(start = 70.dp)
+    val timeTextColor =
+        if (messageData.isSender) Color.White else Color(0xFF02A6FC)  // Determine time text color
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 20.dp)
+            .then(paddingModifier),
+        horizontalArrangement = alignment
     ) {
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.wrapContentWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.cardColors(containerColor = backgroundColor)
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = messageText,
+                    text = messageData.message,
                     style = TextStyle(
                         color = textColor,
                         fontSize = 18.sp,
@@ -174,24 +192,24 @@ fun MessageCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text(
-                        text = timeText,
+                        text = messageData.time,
                         style = TextStyle(
-                            color = if (isDelivered) Color(0xFF42A5F5) else textColor,
+                            color = timeTextColor,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Light
                         ),
                     )
 
-                    if (isDelivered) {
+                    if (!messageData.isSender) {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_chat_read_64x64),
                             contentDescription = "Delivered",
-                            tint = Color(0xFF42A5F5), // Blue checkmark
+                            tint = Color(0xFF42A5F5),
                             modifier = Modifier
                                 .size(16.dp)
                                 .padding(start = 4.dp)
@@ -210,9 +228,7 @@ fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
     var showAttachmentOptions by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 70.dp)
+        modifier.padding(bottom = 70.dp).imePadding() // Moves only when the keyboard appears
 
     ) {
         Row(
@@ -232,8 +248,6 @@ fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
                 )
             }
 
-
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -244,23 +258,41 @@ fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    colors = TextFieldDefaults.colors(),
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedContainerColor = Color.Transparent.copy(alpha = 0.05F),
+                        unfocusedContainerColor = Color.Transparent.copy(alpha = 0.05F),
+                        cursorColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
                     textStyle = LocalTextStyle.current.copy(color = Color.White),
                     singleLine = true,
                     placeholder = {
                         Text(
                             text = "Message",
-                            color = Color.Black.copy(alpha = 0.7f)
+                            color = Color.White
                         )
                     },
                     trailingIcon = {
                         if (text.trim().isNotEmpty()) {
                             IconButton(onClick = {}) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
-                                    contentDescription = "Send",
-                                    tint = Color.White
-                                )
+                                Box(contentAlignment = Alignment.Center) {
+                                    // White circular background
+                                    Box(
+                                        modifier = Modifier
+                                            .size(30.dp) // Adjust size as needed
+                                            .clip(CircleShape)
+                                            .background(Color.White)
+                                    )
+
+                                    // Send message icon
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
+                                        contentDescription = "Send",
+                                        tint = Color(0xFFD2B190),
+                                        modifier = Modifier.size(18.dp) // Adjust size as needed
+                                    )
+                                }
                             }
                         }
                     },
@@ -268,15 +300,17 @@ fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
                 )
             }
 
-            AnimatedVisibility(
-                visible = showAttachmentOptions,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.zIndex(1f) // Ensure it's on top
-            ) {
-                AttachmentOptionsOverlay()
-            }
+        }
 
+        AnimatedVisibility(
+            visible = showAttachmentOptions,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier
+                .zIndex(1f)
+                .fillMaxSize() // Fill the entire Box
+        ) {
+            AttachmentOptionsOverlay()
         }
 
     }
@@ -286,15 +320,22 @@ fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
 @Composable
 fun AttachmentOptionsOverlay() {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
-            .blur(radius = 10.dp) // Apply blur effect
-            .clickable { /* Prevent clicks from passing through */ },
-        contentAlignment = Alignment.BottomStart
+        modifier = Modifier.fillMaxSize()
     ) {
+
+        // Overlay with blur and transparency
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.9f))
+                .blur(radius = 10.dp)
+        )
+
+        // Attachment options content
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.BottomStart) // Align to bottom start
         ) {
             AttachmentOption(iconId = R.drawable.icon_camera_64x64, text = "Camera")
             AttachmentOption(iconId = R.drawable.icon_photos_64x64, text = "Photos")
