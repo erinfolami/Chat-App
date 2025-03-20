@@ -16,18 +16,17 @@ val Gold = Color(0xFFEAC7A0)
 val White = Color(0xFFFFFFFF)
 val Blue = Color(0xFF01A6FC)
 
-private val AlloyGradient1= Color(0xFFbdbdbd)
-private val AlloyGradient2= Color(0xFF676767)
+private val AlloyGradient1 = Color(0xFFbdbdbd)
+private val AlloyGradient2 = Color(0xFF676767)
 
-private val SunshineGradient1= Color(0xFFfbda89)
-private val SunshineGradient2= Color(0xFFf38284)
+private val SunshineGradient1 = Color(0xFFfbda89)
+private val SunshineGradient2 = Color(0xFFf38284)
 
-private val GreenBeachGradient1= Color(0xFF42e397)
-private val GreenBeachGradient2= Color(0xFF35abae)
+private val GreenBeachGradient1 = Color(0xFF42e397)
+private val GreenBeachGradient2 = Color(0xFF35abae)
 
-private val PlumGradient1= Color(0xFFd6a7e3)
-private val PlumGradient2= Color(0xFF5a81e8)
-
+private val PlumGradient1 = Color(0xFFd6a7e3)
+private val PlumGradient2 = Color(0xFF5a81e8)
 
 
 val BackgroundGradient = Brush.linearGradient(
@@ -60,7 +59,7 @@ val GreenBeachGradient = Brush.linearGradient(
     )
 )
 
-val PlumGradient  = Brush.linearGradient(
+val PlumGradient = Brush.linearGradient(
     listOf(
         PlumGradient1,
         PlumGradient2,

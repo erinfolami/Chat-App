@@ -57,7 +57,8 @@ fun ChatScreen() {
             bottomBar = {
                 SendMessageBox(
                     modifier = Modifier
-                        .fillMaxWidth().windowInsetsPadding(WindowInsets.navigationBars),
+                        .fillMaxWidth()
+                        .windowInsetsPadding(WindowInsets.navigationBars),
                     showAttach = {
                         showAttachmentOptions = true
                     }
