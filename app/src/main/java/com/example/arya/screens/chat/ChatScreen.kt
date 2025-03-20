@@ -44,7 +44,7 @@ fun ChatScreen() {
             .background(BackgroundGradient)
     ) {
         val hazeState = remember { HazeState() }
-        var showAttachmentOptions by remember { mutableStateOf(false) } // Add state for overlay visibility
+        var showAttachmentOptions by remember { mutableStateOf(false) }
         Scaffold(
             containerColor = Color.Transparent,
             modifier = Modifier

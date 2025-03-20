@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.arya.R
 import com.example.arya.data.MessageData
+import com.example.arya.data.sampleMessages
 
 // Displays a single message item with different styles for sender and receiver.
 // Includes message text, timestamp, and read status for non-senders.
@@ -36,7 +38,7 @@ fun MessageItem(messageData: MessageData) {
     val paddingModifier =
         if (messageData.isSender) Modifier.padding(end = 70.dp) else Modifier.padding(start = 70.dp)
     val timeTextColor =
-        if (messageData.isSender) Color.White else Color(0xFF02A6FC)  // Determine time text color
+        if (messageData.isSender) Color.White else Color(0xFF02A6FC)
 
     Row(
         modifier = Modifier
@@ -77,7 +79,7 @@ fun MessageItem(messageData: MessageData) {
                     if (!messageData.isSender) {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_chat_read_64x64),
-                            contentDescription = "Delivered",
+                            contentDescription = stringResource(R.string.delivered),
                             tint = Color(0xFF42A5F5),
                             modifier = Modifier
                                 .size(16.dp)
@@ -94,10 +96,6 @@ fun MessageItem(messageData: MessageData) {
 @Composable
 fun PreviewMessageItem() {
     MessageItem(
-        messageData = MessageData(
-            message = "Hello, how are you?",
-            time = "10:30 AM",
-            isSender = true
-        )
+        messageData = sampleMessages[0]
     )
 }

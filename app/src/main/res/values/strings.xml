@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ARYA</string>
+    <string name="camera">Camera</string>
+    <string name="photos">Photos</string>
+    <string name="files">Files</string>
+    <string name="audio">Audio</string>
+    <string name="user_display_picture">User Display Picture</string>
+    <string name="sarah_carter">Sarah Carter</string>
+    <string name="navigation_icon">Navigation Icon</string>
+    <string name="delivered">Delivered</string>
+    <string name="message">Message</string>
 </resources>

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -73,8 +74,9 @@ fun SendMessageBox(
             onValueChange = { text = it },
             placeholder = {
                 Text(
-                    "write message",
-                    style = MaterialTheme.typography.bodyMedium
+                    stringResource(R.string.message),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
                 )
             },
             textStyle = TextStyle(color = White),

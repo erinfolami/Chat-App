@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,13 +43,13 @@ fun ChatToolbar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
-                    contentDescription = "User Display Picture",
+                    contentDescription = stringResource(R.string.user_display_picture),
                     modifier = Modifier
                         .wrapContentSize()
                         .clip(RoundedCornerShape(15.dp))
                 )
                 Text(
-                    text = "Sarah Carter",
+                    text = stringResource(R.string.sarah_carter),
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = InterFontFamily
@@ -63,7 +64,7 @@ fun ChatToolbar(
                 Icon(
                     painter = painterResource(id = R.drawable.icon_arrow_previous_64x64),
                     tint = Color.White,
-                    contentDescription = "Navigation Icon"
+                    contentDescription = stringResource(R.string.navigation_icon)
                 )
             }
         },
