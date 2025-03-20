@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
@@ -29,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.zIndex
 import com.example.arya.R
 import com.example.arya.ui.theme.InterFontFamily
@@ -150,7 +154,6 @@ data class MessageData(
 
 
 @Composable
-
 fun MessageList(messages: List<MessageData>) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(messages) { messageData ->
@@ -220,13 +223,15 @@ fun MessageItem(messageData: MessageData) {
             }
         }
     }
-
+}
 
 
 @Composable
 fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
     var text by remember { mutableStateOf("") }
     var showAttachmentOptions by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     Box(
         modifier.padding(bottom = 70.dp).imePadding() // Moves only when the keyboard appears
@@ -297,7 +302,15 @@ fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
                             }
                         }
                     },
-                    shape = RoundedCornerShape(30.dp) // Apply rounded corners
+                    shape = RoundedCornerShape(30.dp),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done // Makes keyboard button a "Close" action
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    )
                 )
             }
 
