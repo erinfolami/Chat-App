@@ -44,7 +44,7 @@ fun MessageItem(messageData: MessageData) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 20.dp)
+            .padding(horizontal = 16.dp, vertical = 10.dp)
             .then(paddingModifier),
         horizontalArrangement = alignment
     ) {
@@ -53,16 +53,16 @@ fun MessageItem(messageData: MessageData) {
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.cardColors(containerColor = backgroundColor)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     text = messageData.message,
                     style = TextStyle(
                         color = textColor,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Normal
                     )
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -72,7 +72,7 @@ fun MessageItem(messageData: MessageData) {
                         text = messageData.time,
                         style = TextStyle(
                             color = timeTextColor,
-                            fontSize = 14.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Light
                         ),
                     )

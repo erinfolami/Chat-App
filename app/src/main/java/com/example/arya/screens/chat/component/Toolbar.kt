@@ -34,14 +34,14 @@ fun ChatToolbar(
     onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
         ),
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(start = 5.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
