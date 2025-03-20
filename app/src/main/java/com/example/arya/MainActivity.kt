@@ -24,39 +24,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ARYATheme {
-                Scaffold(modifier = Modifier.fillMaxSize().) { innerPadding ->
-                    ChatScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        backgroundModifier = Modifier.linearGradientBackground()
-                    )
-
-                }
+                ChatScreen()
             }
         }
-    }
-}
-
-fun linearGradientBackground(): Modifier = this.drawBehind {
-    val gradient = Brush.linearGradient(
-        colors = listOf(Color(0xFF10A1F6), Color(0xFFE9C39B)), // Use the provided colors
-        start = Offset.Zero,
-        end = Offset(size.width, size.height)
-    )
-    drawRect(brush = gradient)
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ARYATheme {
-        Greeting("Android")
     }
 }
