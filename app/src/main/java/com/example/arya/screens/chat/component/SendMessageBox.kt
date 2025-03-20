@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -56,21 +57,19 @@ fun SendMessageBox(
     showAttach: () -> Unit,
 ) {
     var text by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(
                 start = 16.dp,
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
             ),
     ) {
-        var text by remember { mutableStateOf("") }
-        val interactionSource = remember { MutableInteractionSource() }
 
         Image(
-            painter = painterResource(R.drawable.icon_plus_64x64),
+            painter = painterResource(R.drawable.ic_attach),
             contentDescription = "",
             modifier = Modifier
                 .wrapContentHeight(Alignment.CenterVertically)
@@ -79,21 +78,25 @@ fun SendMessageBox(
                     interactionSource = interactionSource,
                     indication = null,
                 ) {
+                    focusManager.clearFocus(force = true)
                     showAttach()
                 },
         )
 
         TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             value = text,
             onValueChange = { text = it },
             placeholder = {
                 Text(
                     stringResource(R.string.message),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = Color.White
                 )
             },
-            textStyle = TextStyle(color = White),
+            textStyle = MaterialTheme.typography.bodySmall,
             shape = RoundedCornerShape(32.dp),
             colors = TextFieldDefaults.colors().copy(
                 focusedContainerColor = Color.Transparent.copy(alpha = 0.1F),
@@ -121,30 +124,26 @@ fun SendMessageBox(
                         // send(text).also { text = "" }
                     }) {
                         Box(contentAlignment = Alignment.Center) {
-                            // White circular background
                             Box(
                                 modifier = Modifier
-                                    .size(30.dp) // Adjust size as needed
+                                    .size(30.dp)
                                     .clip(CircleShape)
                                     .background(Color.White)
                             )
 
-                            // Send message icon with specified color
                             Icon(
-                                painter = painterResource(R.drawable.icon_sendmessage_64x64),
+                                painter = painterResource(R.drawable.ic_send),
                                 contentDescription = "",
                                 tint = Color(0xFFE9C39C), // Set the desired color
                                 modifier = Modifier
-                                    .size(16.dp).alpha(0.9f)
+                                    .size(16.dp)
+                                    .alpha(0.9f)
 
                             )
                         }
                     }
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
         )
     }
 }
