@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +39,7 @@ fun MessageItem(messageData: MessageData) {
     val paddingModifier =
         if (messageData.isSender) Modifier.padding(end = 70.dp) else Modifier.padding(start = 70.dp)
     val timeTextColor =
-        if (messageData.isSender) Color.White else Color(0xFF02A6FC)
+        if (messageData.isSender) Color.White else Color(0xFF01A6FC)
 
     Row(
         modifier = Modifier
@@ -49,14 +49,18 @@ fun MessageItem(messageData: MessageData) {
         horizontalArrangement = alignment
     ) {
         Card(
-            modifier = Modifier.wrapContentWidth(),
+            modifier = Modifier.wrapContentSize(),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.cardColors(containerColor = backgroundColor)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = messageData.message,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = TextStyle(
+                        color = textColor,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(

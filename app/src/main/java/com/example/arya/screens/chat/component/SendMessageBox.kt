@@ -58,11 +58,9 @@ fun SendMessageBox(
     var text by remember { mutableStateOf("") }
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(
                 start = 16.dp,
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
             ),
     ) {
         var text by remember { mutableStateOf("") }
@@ -83,6 +81,9 @@ fun SendMessageBox(
         )
 
         TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             value = text,
             onValueChange = { text = it },
             placeholder = {
@@ -120,30 +121,26 @@ fun SendMessageBox(
                         // send(text).also { text = "" }
                     }) {
                         Box(contentAlignment = Alignment.Center) {
-                            // White circular background
                             Box(
                                 modifier = Modifier
-                                    .size(30.dp) // Adjust size as needed
+                                    .size(30.dp)
                                     .clip(CircleShape)
                                     .background(Color.White)
                             )
 
-                            // Send message icon with specified color
                             Icon(
                                 painter = painterResource(R.drawable.icon_sendmessage_64x64),
                                 contentDescription = "",
                                 tint = Color(0xFFE9C39C), // Set the desired color
                                 modifier = Modifier
-                                    .size(16.dp).alpha(0.9f)
+                                    .size(16.dp)
+                                    .alpha(0.9f)
 
                             )
                         }
                     }
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
         )
     }
 }

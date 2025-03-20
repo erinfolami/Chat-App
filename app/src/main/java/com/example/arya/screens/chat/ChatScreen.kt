@@ -7,10 +7,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +49,7 @@ fun ChatScreen() {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
+                .imePadding()
                 .hazeSource(hazeState),
             topBar = {
                 ChatToolbar()
@@ -53,7 +57,7 @@ fun ChatScreen() {
             bottomBar = {
                 SendMessageBox(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth().windowInsetsPadding(WindowInsets.navigationBars),
                     showAttach = {
                         showAttachmentOptions = true
                     }
