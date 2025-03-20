@@ -4,9 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,6 +40,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.zIndex
 import com.example.arya.R
 import com.example.arya.ui.theme.InterFontFamily
@@ -252,109 +257,87 @@ fun MessageItem(messageData: MessageData) {
 
 
 @Composable
-fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
+fun SendMessageBox(
+    modifier: Modifier,
+    showAttach: () -> Unit,
+) {
     var text by remember { mutableStateOf("") }
-    var showAttachmentOptions by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
-
-
-    Box(
-        modifier.padding(bottom = 70.dp).imePadding() // Moves only when the keyboard appears
-
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp),
     ) {
-        Row(
+        var text by remember { mutableStateOf("") }
+        val interactionSource = remember { MutableInteractionSource() }
+
+        Image(
+            painter = painterResource(R.drawable.icon_plus_64x64),
+            contentDescription = "",
+            modifier = Modifier
+                .wrapContentHeight(Alignment.CenterVertically)
+                .size(16.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                ) {
+                    showAttach()
+                },
+        )
+
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            placeholder = {
+                Text(
+                    "write message",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            textStyle = TextStyle(color = White),
+            shape = RoundedCornerShape(32.dp),
+            colors = TextFieldDefaults.colors().copy(
+                focusedContainerColor = Color.Transparent.copy(alpha = 0.1F),
+                unfocusedContainerColor = Color.Transparent.copy(alpha = 0.1F),
+                cursorColor = White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+            maxLines = 2,
+            // enabled = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Send,
+            ),
+            keyboardActions = KeyboardActions(onSend = {
+                //send(text).also { text = "" }
+            }),
+            trailingIcon = {
+                AnimatedVisibility(
+                    visible = text.isNotBlank(),
+                    enter = scaleIn(),
+                    exit = scaleOut(),
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.icon_sendmessage_64x64),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(28.dp)
+                            .padding(end = 8.dp)
+                            .clickable {
+                                //send(text).also { text = "" }
+                            }
+                    )
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = {
-                showAttachmentOptions = !showAttachmentOptions
-            }) { // Toggle attachment options
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_plus_64x64), // Replace with your plus icon
-                    contentDescription = "Add",
-                    tint = Color.White,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = Color.Transparent.copy(alpha = 0.05F),
-                        unfocusedContainerColor = Color.Transparent.copy(alpha = 0.05F),
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
-                    textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Message",
-                            color = Color.White
-                        )
-                    },
-                    trailingIcon = {
-                        if (text.trim().isNotEmpty()) {
-                            IconButton(onClick = {}) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    // White circular background
-                                    Box(
-                                        modifier = Modifier
-                                            .size(30.dp) // Adjust size as needed
-                                            .clip(CircleShape)
-                                            .background(Color.White)
-                                    )
-
-                                    // Send message icon
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
-                                        contentDescription = "Send",
-                                        tint = Color(0xFFD2B190),
-                                        modifier = Modifier.size(18.dp) // Adjust size as needed
-                                    )
-                                }
-                            }
-                        }
-                    },
-                    shape = RoundedCornerShape(30.dp),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done // Makes keyboard button a "Close" action
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            keyboardController?.hide()
-                        }
-                    )
-                )
-            }
-
-        }
-
-        AnimatedVisibility(
-            visible = showAttachmentOptions,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier
-                .zIndex(1f)
-                .fillMaxSize() // Fill the entire Box
-        ) {
-            AttachmentOptionsOverlay()
-        }
-
+                .padding(16.dp)
+        )
     }
 }
-
 
 @Composable
 fun AttachmentOptionsOverlay() {
