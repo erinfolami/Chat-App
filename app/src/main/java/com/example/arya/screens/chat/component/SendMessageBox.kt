@@ -4,16 +4,25 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,6 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -50,7 +61,10 @@ fun SendMessageBox(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp),
+            .padding(
+                start = 16.dp,
+                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+            ),
     ) {
         var text by remember { mutableStateOf("") }
         val interactionSource = remember { MutableInteractionSource() }
@@ -103,16 +117,29 @@ fun SendMessageBox(
                     enter = scaleIn(),
                     exit = scaleOut(),
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.icon_sendmessage_64x64),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(28.dp)
-                            .padding(end = 8.dp)
-                            .clickable {
-                                //send(text).also { text = "" }
-                            }
-                    )
+                    IconButton(onClick = {
+                        // send(text).also { text = "" }
+                    }) {
+                        Box(contentAlignment = Alignment.Center) {
+                            // White circular background
+                            Box(
+                                modifier = Modifier
+                                    .size(30.dp) // Adjust size as needed
+                                    .clip(CircleShape)
+                                    .background(Color.White)
+                            )
+
+                            // Send message icon with specified color
+                            Icon(
+                                painter = painterResource(R.drawable.icon_sendmessage_64x64),
+                                contentDescription = "",
+                                tint = Color(0xFFE9C39C), // Set the desired color
+                                modifier = Modifier
+                                    .size(16.dp).alpha(0.9f)
+
+                            )
+                        }
+                    }
                 }
             },
             modifier = Modifier

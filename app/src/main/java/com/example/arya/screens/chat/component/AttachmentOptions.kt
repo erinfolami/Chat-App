@@ -2,6 +2,7 @@ package com.example.arya.screens.chat.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,12 +17,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.arya.R
+import com.example.arya.ui.theme.AlloyGradient
+import com.example.arya.ui.theme.GreenBeachGradient
+import com.example.arya.ui.theme.PlumGradient
+import com.example.arya.ui.theme.SunshineGradient
 
 // Overlay for attachment options with close on click functionality.
 @Composable
@@ -29,36 +35,51 @@ fun AttachmentOptionsOverlay(
     modifier: Modifier,
     closeAttach: () -> Unit
 ) {
-    Box(
+
+    Column(
+        verticalArrangement = Arrangement.Bottom,
         modifier = modifier
+            .clickable { closeAttach() }
+            .padding(bottom = 60.dp, start = 20.dp)
     ) {
-        // Attachment options content
-        Column(
-            modifier = Modifier
-                .clickable { closeAttach() }
-                .padding(16.dp)
-                .align(Alignment.BottomStart)
-        ) {
-            AttachmentOptionItem(iconId = R.drawable.icon_camera_64x64, text = stringResource(R.string.camera))
-            AttachmentOptionItem(iconId = R.drawable.icon_photos_64x64, text = stringResource(R.string.photos))
-            AttachmentOptionItem(iconId = R.drawable.icon_files_64x64, text = stringResource(R.string.files))
-            AttachmentOptionItem(iconId = R.drawable.icon_audio_64x64, text = stringResource(R.string.audio))
-        }
+        AttachmentOptionItem(
+            iconId = R.drawable.icon_camera_64x64,
+            text = stringResource(R.string.camera),
+            AlloyGradient
+        )
+        AttachmentOptionItem(
+            iconId = R.drawable.icon_photos_64x64,
+            text = stringResource(R.string.photos),
+            SunshineGradient
+        )
+        AttachmentOptionItem(
+            iconId = R.drawable.icon_files_64x64,
+            text = stringResource(R.string.files),
+            GreenBeachGradient
+        )
+        AttachmentOptionItem(
+            iconId = R.drawable.icon_audio_64x64,
+            text = stringResource(R.string.audio),
+            PlumGradient
+        )
     }
+
 }
 
 // UI item for an individual attachment option with an icon and label.
 @Composable
-fun AttachmentOptionItem(iconId: Int, text: String) {
+fun AttachmentOptionItem(iconId: Int, text: String, color: Brush) {
     Row(
-        modifier = Modifier.padding(vertical = 8.dp),
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .clickable {},
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.2f))
+                .background(color)
                 .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
