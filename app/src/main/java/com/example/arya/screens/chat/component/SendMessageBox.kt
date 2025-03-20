@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -56,6 +57,9 @@ fun SendMessageBox(
     showAttach: () -> Unit,
 ) {
     var text by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -63,8 +67,6 @@ fun SendMessageBox(
                 start = 16.dp,
             ),
     ) {
-        var text by remember { mutableStateOf("") }
-        val interactionSource = remember { MutableInteractionSource() }
 
         Image(
             painter = painterResource(R.drawable.icon_plus_64x64),
@@ -76,6 +78,7 @@ fun SendMessageBox(
                     interactionSource = interactionSource,
                     indication = null,
                 ) {
+                    focusManager.clearFocus(force = true)
                     showAttach()
                 },
         )
