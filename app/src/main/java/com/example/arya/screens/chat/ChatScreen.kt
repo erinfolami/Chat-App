@@ -44,6 +44,9 @@ fun ChatScreen() {
         val hazeState = remember { HazeState() }
 
         Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .hazeSource(hazeState),
             topBar = {
                 ChatToolbar()
             },
@@ -55,11 +58,7 @@ fun ChatScreen() {
                         showAttachmentOptions = true
                     }
                 )
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .hazeSource(hazeState)
+            }
         ) { innerPadding ->
             MessageList(
                 modifier = Modifier

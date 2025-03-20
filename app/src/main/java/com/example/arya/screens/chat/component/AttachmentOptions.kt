@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -89,7 +90,7 @@ fun AttachmentOptionItem(iconId: Int, text: String, color: Brush) {
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = text, color = Color.White)
+        Text(text = text, color = Color.White, style = MaterialTheme.typography.bodyLarge)
     }
 }
 

@@ -56,7 +56,6 @@ fun SendMessageBox(
     showAttach: () -> Unit,
 ) {
     var text by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -89,11 +88,11 @@ fun SendMessageBox(
             placeholder = {
                 Text(
                     stringResource(R.string.message),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = Color.White
                 )
             },
-            textStyle = TextStyle(color = White),
+            textStyle = MaterialTheme.typography.bodySmall,
             shape = RoundedCornerShape(32.dp),
             colors = TextFieldDefaults.colors().copy(
                 focusedContainerColor = Color.Transparent.copy(alpha = 0.1F),
