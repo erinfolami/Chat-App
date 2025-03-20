@@ -34,12 +34,15 @@ fun ChatToolbar(
     onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
         ),
         title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 5.dp)
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
                     contentDescription = stringResource(R.string.user_display_picture),
@@ -56,7 +59,7 @@ fun ChatToolbar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onBackPressed,modifier = Modifier.size(20.dp)) {
+            IconButton(onClick = onBackPressed, modifier = Modifier.size(20.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_previous),
                     tint = Color.White,

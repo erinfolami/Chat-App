@@ -92,8 +92,8 @@ fun SendMessageBox(
             placeholder = {
                 Text(
                     stringResource(R.string.message),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.8f)
                 )
             },
             textStyle = MaterialTheme.typography.bodySmall,
