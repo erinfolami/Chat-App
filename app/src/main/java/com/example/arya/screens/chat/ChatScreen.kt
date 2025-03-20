@@ -38,19 +38,12 @@ import dev.chrisbanes.haze.materials.HazeMaterials
 @OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 fun ChatScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundGradient)
-    ) {
-        val hazeState = remember { HazeState() }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         var showAttachmentOptions by remember { mutableStateOf(false) }
+        val hazeState = remember { HazeState() }
+
         Scaffold(
-            containerColor = Color.Transparent,
-            modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .hazeSource(hazeState),
             topBar = {
                 ChatToolbar()
             },
@@ -62,20 +55,18 @@ fun ChatScreen() {
                         showAttachmentOptions = true
                     }
                 )
-            }
-
+            },
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+                .hazeSource(hazeState)
         ) { innerPadding ->
-
-            Column(
+            MessageList(
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-
-            ) {
-                MessageList(messages = sampleMessages)
-            }
-
-
+                    .background(BackgroundGradient)
+                    .imePadding()
+                    .padding(innerPadding), messages = sampleMessages
+            )
         }
 
         AnimatedVisibility(
@@ -90,8 +81,8 @@ fun ChatScreen() {
                 closeAttach = { showAttachmentOptions = false },
             )
         }
-
     }
+
 
 }
 

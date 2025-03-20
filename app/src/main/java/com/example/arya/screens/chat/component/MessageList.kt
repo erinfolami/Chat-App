@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import com.example.arya.data.MessageData
 
 @Composable
-fun MessageList(messages: List<MessageData>) {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+fun MessageList(modifier: Modifier, messages: List<MessageData>) {
+    LazyColumn(modifier.fillMaxWidth()) {
         items(messages) { messageData ->
             MessageItem(messageData = messageData)
         }
