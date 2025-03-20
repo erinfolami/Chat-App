@@ -1,119 +1,184 @@
 package com.example.arya.screens.chat
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.zIndex
 import com.example.arya.R
+import com.example.arya.data.MessageData
+import com.example.arya.ui.theme.ARYATheme
+import com.example.arya.ui.theme.BackgroundGradient
 import com.example.arya.ui.theme.InterFontFamily
-import linearGradientBackground
+import com.example.arya.ui.theme.White
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
+import dev.chrisbanes.haze.materials.HazeMaterials
 
 
+
+@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
-fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Modifier) {
-
-    var showAttachmentOptions by remember { mutableStateOf(false) } // Add state for overlay visibility
-
+fun ChatScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .then(backgroundModifier)
+            .background(BackgroundGradient)
     ) {
+        val hazeState = remember { HazeState() }
+        var showAttachmentOptions by remember { mutableStateOf(false) } // Add state for overlay visibility
+        Scaffold(
+            containerColor = Color.Transparent,
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+                .hazeSource(hazeState),
+            topBar = {
+                ChatToolbar()
+            },
+            bottomBar = {
+                SendMessageBox(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    showAttach = {
+                        showAttachmentOptions = true
+                    }
+                )
+            }
 
-        Column(
-            Modifier.fillMaxSize()
-        ) {
-            ChatToolbar(
-                displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
-                userName = "Sarah Carter",
-                navigationIcon = painterResource(id = R.drawable.icon_arrow_previous_64x64),
-                onNavigationClick = { /* Handle navigation click */ },
-            )
+        ) { innerPadding ->
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+
+            ) {
 
 
-            val messages = listOf(
-                MessageData(
-                    message = "Hey John, let's get together and discuss the job proposal. Does Monday Work?",
-                    time = "11:48 AM",
-                    isSender = true,
-                ),
-                MessageData(
-                    message = "That would be great. Yes, I will see you on Monday.",
-                    time = "11:54 AM",
-                    isSender = false,
-                ),
-            )
+                val messages = listOf(
+                    MessageData(
+                        message = "Hey John, let's get together and discuss the job proposal. Does Monday Work?",
+                        time = "11:48 AM",
+                        isSender = true,
+                    ),
+                    MessageData(
+                        message = "That would be great. Yes, I will see you on Monday.",
+                        time = "11:54 AM",
+                        isSender = false,
+                    ),
+                )
 
-            MessageList(messages = messages)
+                MessageList(messages = messages)
 
-            Spacer(modifier = Modifier.weight(1f))
+
+            }
 
 
         }
-        SendMessageBox(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomEnd), // Align to bottom end
-            backgroundModifier = backgroundModifier,
-        )
+
+        AnimatedVisibility(
+            showAttachmentOptions,
+            enter = fadeIn(animationSpec = tween(durationMillis = 500)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 500)),
+        ) {
+            AttachmentOptionsOverlay(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin()),
+                closeAttach = { showAttachmentOptions = false },
+            )
+        }
 
     }
 
 }
 
-
+// This composable function creates a customizable toolbar for the chat screen.
+// It includes a navigation icon, a display picture, and the user's name.
 // This composable function creates a customizable toolbar for the chat screen.
 // It includes a navigation icon, a display picture, and the user's name.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatToolbar(
-    displayPicture: Painter,
-    userName: String,
-    navigationIcon: Painter,
-    onNavigationClick: () -> Unit = {},
+    onBackPressed: () -> Unit = {},
 ) {
-
     TopAppBar(
+        modifier = Modifier.fillMaxWidth(),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            // navigationIconContentColor = Color.White,
+        ),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = displayPicture,
+                    painter = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
                     contentDescription = "User Display Picture",
                     modifier = Modifier
                         .wrapContentSize()
                         .clip(RoundedCornerShape(15.dp))
                 )
                 Text(
-                    text = userName,
+                    text = "Sarah Carter",
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = InterFontFamily
@@ -124,9 +189,9 @@ fun ChatToolbar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
+            IconButton(onClick = onBackPressed) {
                 Icon(
-                    painter = navigationIcon,
+                    painter = painterResource(id = R.drawable.icon_arrow_previous_64x64),
                     tint = Color.White,
                     contentDescription = "Navigation Icon"
                 )
@@ -135,12 +200,9 @@ fun ChatToolbar(
         actions = {
             // You can add more actions here (e.g., settings, profile, etc.)
         },
-        modifier = Modifier.fillMaxWidth(),
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
 
-    )
+        )
 }
-
 
 data class MessageData(
     val message: String,
@@ -150,7 +212,6 @@ data class MessageData(
 
 
 @Composable
-
 fun MessageList(messages: List<MessageData>) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(messages) { messageData ->
@@ -220,121 +281,104 @@ fun MessageItem(messageData: MessageData) {
             }
         }
     }
-
-
-
-@Composable
-fun SendMessageBox(modifier: Modifier, backgroundModifier: Modifier) {
-    var text by remember { mutableStateOf("") }
-    var showAttachmentOptions by remember { mutableStateOf(false) }
-
-    Box(
-        modifier.padding(bottom = 70.dp).imePadding() // Moves only when the keyboard appears
-
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = {
-                showAttachmentOptions = !showAttachmentOptions
-            }) { // Toggle attachment options
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_plus_64x64), // Replace with your plus icon
-                    contentDescription = "Add",
-                    tint = Color.White,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = Color.Transparent.copy(alpha = 0.05F),
-                        unfocusedContainerColor = Color.Transparent.copy(alpha = 0.05F),
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
-                    textStyle = LocalTextStyle.current.copy(color = Color.White),
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = "Message",
-                            color = Color.White
-                        )
-                    },
-                    trailingIcon = {
-                        if (text.trim().isNotEmpty()) {
-                            IconButton(onClick = {}) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    // White circular background
-                                    Box(
-                                        modifier = Modifier
-                                            .size(30.dp) // Adjust size as needed
-                                            .clip(CircleShape)
-                                            .background(Color.White)
-                                    )
-
-                                    // Send message icon
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.icon_sendmessage_64x64),
-                                        contentDescription = "Send",
-                                        tint = Color(0xFFD2B190),
-                                        modifier = Modifier.size(18.dp) // Adjust size as needed
-                                    )
-                                }
-                            }
-                        }
-                    },
-                    shape = RoundedCornerShape(30.dp) // Apply rounded corners
-                )
-            }
-
-        }
-
-        AnimatedVisibility(
-            visible = showAttachmentOptions,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier
-                .zIndex(1f)
-                .fillMaxSize() // Fill the entire Box
-        ) {
-            AttachmentOptionsOverlay()
-        }
-
-    }
 }
 
 
 @Composable
-fun AttachmentOptionsOverlay() {
-    Box(
-        modifier = Modifier.fillMaxSize()
+fun SendMessageBox(
+    modifier: Modifier,
+    showAttach: () -> Unit,
+) {
+    var text by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp),
     ) {
+        var text by remember { mutableStateOf("") }
+        val interactionSource = remember { MutableInteractionSource() }
 
-        // Overlay with blur and transparency
-        Box(
+        Image(
+            painter = painterResource(R.drawable.icon_plus_64x64),
+            contentDescription = "",
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.9f))
-                .blur(radius = 10.dp)
+                .wrapContentHeight(Alignment.CenterVertically)
+                .size(16.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                ) {
+                    showAttach()
+                },
         )
 
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            placeholder = {
+                Text(
+                    "write message",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            textStyle = TextStyle(color = White),
+            shape = RoundedCornerShape(32.dp),
+            colors = TextFieldDefaults.colors().copy(
+                focusedContainerColor = Color.Transparent.copy(alpha = 0.1F),
+                unfocusedContainerColor = Color.Transparent.copy(alpha = 0.1F),
+                cursorColor = White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+            maxLines = 2,
+            // enabled = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Send,
+            ),
+            keyboardActions = KeyboardActions(onSend = {
+                //send(text).also { text = "" }
+            }),
+            trailingIcon = {
+                AnimatedVisibility(
+                    visible = text.isNotBlank(),
+                    enter = scaleIn(),
+                    exit = scaleOut(),
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.icon_sendmessage_64x64),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(28.dp)
+                            .padding(end = 8.dp)
+                            .clickable {
+                                //send(text).also { text = "" }
+                            }
+                    )
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
+}
+
+@Composable
+fun AttachmentOptionsOverlay(
+    modifier: Modifier,
+    closeAttach: () -> Unit
+) {
+    Box(
+        modifier = modifier
+    ) {
         // Attachment options content
         Column(
             modifier = Modifier
+                .clickable { closeAttach() }
                 .padding(16.dp)
                 .align(Alignment.BottomStart) // Align to bottom start
         ) {
@@ -374,7 +418,11 @@ fun AttachmentOption(iconId: Int, text: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    val backgroundModifier = Modifier.linearGradientBackground()
+    ARYATheme {
+        ChatScreen()
+        //  GradientScaffoldScreen()
+    }
+    //    val backgroundModifier = Modifier.linearGradientBackground()
 
-    ChatScreen(backgroundModifier)
+
 }
