@@ -27,7 +27,6 @@ import com.example.arya.R
 import com.example.arya.ui.theme.InterFontFamily
 
 
-
 // Chat toolbar with back navigation and user profile display.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +37,6 @@ fun ChatToolbar(
         modifier = Modifier.fillMaxWidth(),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
-            // navigationIconContentColor = Color.White,
         ),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {

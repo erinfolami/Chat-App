@@ -32,12 +32,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.arya.R
 import com.example.arya.ui.theme.White
 
-
-
+//Composable for the message input box with attachment icon and send button.
 @Composable
 fun SendMessageBox(
     modifier: Modifier,
@@ -87,7 +87,6 @@ fun SendMessageBox(
                 unfocusedIndicatorColor = Color.Transparent,
             ),
             maxLines = 2,
-            // enabled = false,
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences,
                 keyboardType = KeyboardType.Text,
@@ -119,4 +118,10 @@ fun SendMessageBox(
                 .padding(16.dp)
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSendMessageBox() {
+    SendMessageBox(modifier = Modifier, showAttach = {})
 }

@@ -18,10 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.arya.R
 
-
+// Overlay for attachment options with close on click functionality.
 @Composable
 fun AttachmentOptionsOverlay(
     modifier: Modifier,
@@ -35,7 +36,7 @@ fun AttachmentOptionsOverlay(
             modifier = Modifier
                 .clickable { closeAttach() }
                 .padding(16.dp)
-                .align(Alignment.BottomStart) // Align to bottom start
+                .align(Alignment.BottomStart)
         ) {
             AttachmentOptionItem(iconId = R.drawable.icon_camera_64x64, text = "Camera")
             AttachmentOptionItem(iconId = R.drawable.icon_photos_64x64, text = "Photos")
@@ -45,6 +46,7 @@ fun AttachmentOptionsOverlay(
     }
 }
 
+// UI item for an individual attachment option with an icon and label.
 @Composable
 fun AttachmentOptionItem(iconId: Int, text: String) {
     Row(
@@ -67,4 +69,10 @@ fun AttachmentOptionItem(iconId: Int, text: String) {
         Spacer(modifier = Modifier.width(16.dp))
         Text(text = text, color = Color.White)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewAttachmentOptionsOverlay() {
+    AttachmentOptionsOverlay(modifier = Modifier, closeAttach = {})
 }
