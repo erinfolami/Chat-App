@@ -36,7 +36,7 @@ val Typography = Typography(
         letterSpacing = 0.25.sp,
     ),
 
-    bodySmall = TextStyle(  //Time Message
+    bodySmall = TextStyle(
         fontFamily = interFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 10.sp,
@@ -44,7 +44,7 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
-    bodyLarge = TextStyle(   //attachment overlay
+    bodyLarge = TextStyle(
         fontFamily = interFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,

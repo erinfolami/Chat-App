@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -56,11 +57,8 @@ fun MessageItem(messageData: MessageData) {
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
                     text = messageData.message,
-                    style = TextStyle(
-                        color = textColor,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
-                    )
+                    color = textColor,
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(
