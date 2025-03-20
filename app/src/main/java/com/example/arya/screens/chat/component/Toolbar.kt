@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,9 +56,9 @@ fun ChatToolbar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onBackPressed) {
+            IconButton(onClick = onBackPressed,modifier = Modifier.size(20.dp)) {
                 Icon(
-                    painter = painterResource(id = R.drawable.icon_arrow_previous_64x64),
+                    painter = painterResource(id = R.drawable.ic_previous),
                     tint = Color.White,
                     contentDescription = stringResource(R.string.navigation_icon)
                 )

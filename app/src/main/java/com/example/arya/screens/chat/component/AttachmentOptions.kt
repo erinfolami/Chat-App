@@ -46,22 +46,22 @@ fun AttachmentOptionsOverlay(
             .padding(bottom = 60.dp, start = 20.dp)
     ) {
         AttachmentOptionItem(
-            iconId = R.drawable.icon_camera_64x64,
+            iconId = R.drawable.ic_camera,
             text = stringResource(R.string.camera),
             AlloyGradient
         )
         AttachmentOptionItem(
-            iconId = R.drawable.icon_photos_64x64,
+            iconId = R.drawable.ic_photos,
             text = stringResource(R.string.photos),
             SunshineGradient
         )
         AttachmentOptionItem(
-            iconId = R.drawable.icon_files_64x64,
+            iconId = R.drawable.ic_files,
             text = stringResource(R.string.files),
             GreenBeachGradient
         )
         AttachmentOptionItem(
-            iconId = R.drawable.icon_audio_64x64,
+            iconId = R.drawable.ic_audio,
             text = stringResource(R.string.audio),
             PlumGradient
         )

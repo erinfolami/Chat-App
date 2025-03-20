@@ -79,7 +79,7 @@ fun MessageItem(messageData: MessageData) {
 
                     if (!messageData.isSender) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon_chat_read_64x64),
+                            painter = painterResource(id = R.drawable.ic_chat_read),
                             contentDescription = stringResource(R.string.delivered),
                             tint = Color(0xFF42A5F5),
                             modifier = Modifier

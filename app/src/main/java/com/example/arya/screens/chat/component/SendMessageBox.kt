@@ -69,7 +69,7 @@ fun SendMessageBox(
     ) {
 
         Image(
-            painter = painterResource(R.drawable.icon_plus_64x64),
+            painter = painterResource(R.drawable.ic_attach),
             contentDescription = "",
             modifier = Modifier
                 .wrapContentHeight(Alignment.CenterVertically)
@@ -132,7 +132,7 @@ fun SendMessageBox(
                             )
 
                             Icon(
-                                painter = painterResource(R.drawable.icon_sendmessage_64x64),
+                                painter = painterResource(R.drawable.ic_send),
                                 contentDescription = "",
                                 tint = Color(0xFFE9C39C), // Set the desired color
                                 modifier = Modifier
