@@ -1,6 +1,7 @@
 package com.example.arya.screens.chat
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
@@ -42,58 +43,82 @@ import com.example.arya.ui.theme.InterFontFamily
 import linearGradientBackground
 
 
+@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
-fun ChatScreen(modifier: Modifier = Modifier, backgroundModifier: Modifier = Modifier) {
-
-    var showAttachmentOptions by remember { mutableStateOf(false) } // Add state for overlay visibility
-
+fun ChatScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .then(backgroundModifier)
+            .background(BackgroundGradient)
     ) {
+        val hazeState = remember { HazeState() }
+        var showAttachmentOptions by remember { mutableStateOf(false) } // Add state for overlay visibility
+        Scaffold(
+            containerColor = Color.Transparent,
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+                .hazeSource(hazeState),
+            topBar = {
+                ChatToolbar()
+            },
+            bottomBar = {
+                SendMessageBox(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    showAttach = {
+                        showAttachmentOptions = true
+                    }
+                )
+            }
 
-        Column(
-            Modifier.fillMaxSize()
-        ) {
-            ChatToolbar(
-                displayPicture = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
-                userName = "Sarah Carter",
-                navigationIcon = painterResource(id = R.drawable.icon_arrow_previous_64x64),
-                onNavigationClick = { /* Handle navigation click */ },
-            )
+        ) { innerPadding ->
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+
+            ) {
 
 
-            val messages = listOf(
-                MessageData(
-                    message = "Hey John, let's get together and discuss the job proposal. Does Monday Work?",
-                    time = "11:48 AM",
-                    isSender = true,
-                ),
-                MessageData(
-                    message = "That would be great. Yes, I will see you on Monday.",
-                    time = "11:54 AM",
-                    isSender = false,
-                ),
-            )
+                val messages = listOf(
+                    MessageData(
+                        message = "Hey John, let's get together and discuss the job proposal. Does Monday Work?",
+                        time = "11:48 AM",
+                        isSender = true,
+                    ),
+                    MessageData(
+                        message = "That would be great. Yes, I will see you on Monday.",
+                        time = "11:54 AM",
+                        isSender = false,
+                    ),
+                )
 
-            MessageList(messages = messages)
+                MessageList(messages = messages)
 
-            Spacer(modifier = Modifier.weight(1f))
+
+            }
 
 
         }
-        SendMessageBox(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomEnd), // Align to bottom end
-            backgroundModifier = backgroundModifier,
-        )
+
+        AnimatedVisibility(
+            showAttachmentOptions,
+            enter = fadeIn(animationSpec = tween(durationMillis = 500)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 500)),
+        ) {
+            AttachmentOptionsOverlay(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin()),
+                closeAttach = { showAttachmentOptions = false },
+            )
+        }
 
     }
 
 }
-
 
 // This composable function creates a customizable toolbar for the chat screen.
 // It includes a navigation icon, a display picture, and the user's name.
