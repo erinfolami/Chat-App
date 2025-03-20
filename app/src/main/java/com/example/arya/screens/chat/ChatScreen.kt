@@ -122,27 +122,30 @@ fun ChatScreen() {
 
 // This composable function creates a customizable toolbar for the chat screen.
 // It includes a navigation icon, a display picture, and the user's name.
+// This composable function creates a customizable toolbar for the chat screen.
+// It includes a navigation icon, a display picture, and the user's name.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatToolbar(
-    displayPicture: Painter,
-    userName: String,
-    navigationIcon: Painter,
-    onNavigationClick: () -> Unit = {},
+    onBackPressed: () -> Unit = {},
 ) {
-
     TopAppBar(
+        modifier = Modifier.fillMaxWidth(),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            // navigationIconContentColor = Color.White,
+        ),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = displayPicture,
+                    painter = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
                     contentDescription = "User Display Picture",
                     modifier = Modifier
                         .wrapContentSize()
                         .clip(RoundedCornerShape(15.dp))
                 )
                 Text(
-                    text = userName,
+                    text = "Sarah Carter",
                     style = TextStyle(
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = InterFontFamily
@@ -153,9 +156,9 @@ fun ChatToolbar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
+            IconButton(onClick = onBackPressed) {
                 Icon(
-                    painter = navigationIcon,
+                    painter = painterResource(id = R.drawable.icon_arrow_previous_64x64),
                     tint = Color.White,
                     contentDescription = "Navigation Icon"
                 )
@@ -164,12 +167,9 @@ fun ChatToolbar(
         actions = {
             // You can add more actions here (e.g., settings, profile, etc.)
         },
-        modifier = Modifier.fillMaxWidth(),
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
 
-    )
+        )
 }
-
 
 data class MessageData(
     val message: String,
