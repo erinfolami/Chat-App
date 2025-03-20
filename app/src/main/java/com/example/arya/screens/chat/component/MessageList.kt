@@ -1,5 +1,6 @@
 package com.example.arya.screens.chat.component
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,7 +10,7 @@ import com.example.arya.data.MessageData
 
 @Composable
 fun MessageList(modifier: Modifier, messages: List<MessageData>) {
-    LazyColumn(modifier.fillMaxWidth()) {
+    LazyColumn(modifier.fillMaxSize()) {
         items(messages) { messageData ->
             MessageItem(messageData = messageData)
         }
