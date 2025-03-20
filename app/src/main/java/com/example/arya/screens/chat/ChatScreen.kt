@@ -340,22 +340,17 @@ fun SendMessageBox(
 }
 
 @Composable
-fun AttachmentOptionsOverlay() {
+fun AttachmentOptionsOverlay(
+    modifier: Modifier,
+    closeAttach: () -> Unit
+) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
-
-        // Overlay with blur and transparency
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.9f))
-                .blur(radius = 10.dp)
-        )
-
         // Attachment options content
         Column(
             modifier = Modifier
+                .clickable { closeAttach() }
                 .padding(16.dp)
                 .align(Alignment.BottomStart) // Align to bottom start
         ) {
