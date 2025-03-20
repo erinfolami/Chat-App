@@ -153,56 +153,7 @@ fun ChatScreen() {
 
 }
 
-// This composable function creates a customizable toolbar for the chat screen.
-// It includes a navigation icon, a display picture, and the user's name.
-// This composable function creates a customizable toolbar for the chat screen.
-// It includes a navigation icon, a display picture, and the user's name.
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ChatToolbar(
-    onBackPressed: () -> Unit = {},
-) {
-    TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            // navigationIconContentColor = Color.White,
-        ),
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.arya_profileavatars_sarahcarter),
-                    contentDescription = "User Display Picture",
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .clip(RoundedCornerShape(15.dp))
-                )
-                Text(
-                    text = "Sarah Carter",
-                    style = TextStyle(
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = InterFontFamily
-                    ),
-                    color = Color.White,
-                    modifier = Modifier.padding(start = 10.dp)
-                )
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_arrow_previous_64x64),
-                    tint = Color.White,
-                    contentDescription = "Navigation Icon"
-                )
-            }
-        },
-        actions = {
-            // You can add more actions here (e.g., settings, profile, etc.)
-        },
 
-        )
-}
 
 data class MessageData(
     val message: String,
