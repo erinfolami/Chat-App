@@ -53,10 +53,13 @@ Message Bar: Add an attachment icon, input field, and send button.
 
 Attachment Overlay: Provide icons and text options for media selection.
 
+## Recommendations
+
+SVG should be used for drawables instead of PNG, as it allows for more consistent icons across various devices.
+
 ## APK File
 
 https://docs.google.com/uc?export=download&id=1q33C6Mt2Ah8uMJ6YgBZwRsdy48KZ2JnI
-
 
 
 ## Setup Instructions
